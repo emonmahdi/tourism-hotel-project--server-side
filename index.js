@@ -29,11 +29,21 @@ async function run (){
             res.send(services);
         })
         //add new Room Api
-        app.post('/addRoom', async(req, res) => {
-          const result = await serviceCollection.insertOne(req.body);
+        // app.post('/addRoom', async(req, res) => {
+        //   const result = await serviceCollection.insertOne(req.body);
+        //   console.log(result);
+        //   res.json(result.insertedId);
+        // })
+        //Post Api
+        app.post('/services', async(req, res) => {
+          const service = req.body;
+          console.log('hit the api', service);
+
+          const result = await serviceCollection.insertOne(service)
           console.log(result);
-          res.json(result.insertedId);
+          res.send(result);
         })
+
         // get add room
         app.get('/rooms', async(req, res) => {
           const result = await serviceCollection.find({}).toArray();
