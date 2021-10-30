@@ -32,7 +32,7 @@ async function run (){
         app.post('/addRoom', async(req, res) => {
           const result = await serviceCollection.insertOne(req.body);
           console.log(result);
-          res.send(result.insertedId);
+          res.json(result.insertedId);
         })
         // get add room
         app.get('/rooms', async(req, res) => {
