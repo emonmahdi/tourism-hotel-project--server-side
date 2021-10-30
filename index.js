@@ -28,7 +28,17 @@ async function run (){
             const services = await cursor.toArray();
             res.send(services);
         })
-
+        //add new Room Api
+        app.post('/addRoom', async(req, res) => {
+          const result = await serviceCollection.insertOne(req.body);
+          console.log(result);
+          res.send(result.insertedId);
+        })
+        // get add room
+        app.get('/rooms', async(req, res) => {
+          const result = await serviceCollection.find({}).toArray();
+          res.send(result);
+        })
 
     }finally{
         // await client.close()
