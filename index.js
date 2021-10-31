@@ -1,5 +1,6 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 const cors = require('cors');
 require('dotenv').config()
 const app = express();
@@ -21,6 +22,8 @@ async function run (){
         await client.connect(); 
         const database = client.db('hotelServices');
         const serviceCollection = database.collection('roomService');
+        const orderCollection = database.collection('orders')
+
 
         // GET Service API
         app.get('/rooms', async(req,res) => {
@@ -48,6 +51,54 @@ async function run (){
         app.get('/rooms', async(req, res) => {
           const result = await serviceCollection.find({}).toArray();
           res.send(result);
+        })
+
+        // Order book post api
+        app.post('/myorder', async(req, res) => {
+          const order = req.body;
+          console.log('hitting the order', order);
+          const result = await orderCollection.insertOne(order);
+          console.log(result);
+          res.json(result);
+        });
+
+        //my order GET API
+        app.get('/order/:email', async(req, res) => {
+          console.log(req.params.email)
+          const query = {email: req.params.email};
+          console.log(query) 
+          const result = await orderCollection.find({email:  req?.params?.email}).toArray();
+          console.log('get the api service', result);
+           res.json(result);
+        });
+
+        // DELETE API
+        app.delete('/order/:id', async (req, res) => {
+          const id = req.params.id;
+          console.log(id)
+          const query = { _id: ObjectId(id) };
+          const result = await orderCollection.deleteOne(query);
+          console.log('deleting user with id', id);
+          res.json(result);
+        })
+
+        // manage all order get api
+        app.get('/orders', async(req, res) => {
+          const cursor = orderCollection.find({})
+          const result = await cursor.toArray();
+          res.send(result);  
+          console.log('all orders here',result)
+        }) ;
+
+        // delete manage all orders
+         // DELETE API
+         app.delete('/orders/:id', async (req, res) => {
+          const id = req.params.id;
+          console.log(id)
+          const query = { _id: ObjectId(id) };
+          const result = await orderCollection.deleteOne(query);
+          console.log('deleting user with id', id);
+          res.json(result);
         })
 
     }finally{
