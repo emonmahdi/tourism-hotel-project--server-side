@@ -82,7 +82,7 @@ async function run (){
           res.json(result);
         })
 
-        // manage all order get api
+        // manage all order get api server
         app.get('/orders', async(req, res) => {
           const cursor = orderCollection.find({})
           const result = await cursor.toArray();
@@ -90,7 +90,7 @@ async function run (){
           console.log('all orders here',result)
         }) ;
 
-        // delete manage all orders
+        // delete manage all orders 
          // DELETE API
          app.delete('/orders/:id', async (req, res) => {
           const id = req.params.id;
